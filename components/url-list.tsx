@@ -23,7 +23,7 @@ export default function UrlList() {
   const fetchUrls = async () => {
     try {
       // Uso de ruta relativa para hacer la solicitud.
-      const response = await fetch("/api/urls");
+      const response = await fetch("/api/urls/route");
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
