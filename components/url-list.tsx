@@ -3,26 +3,29 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { Check, CopyIcon, EyeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+
 type Url = {
   id: string;
   shortCode: string;
   originalUrl: string;
   visits: number;
 };
+
 export default function UrlList() {
   const [urls, setUrls] = useState<Url[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
   const [copieUrl, setCopieUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const shortenerUrl = (code: string) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/${code}`;
+
   const fetchUrls = async () => {
     setIsLoading(true);
     try {
-      // Asegúrate de que la URL sea correcta
-      const response = await fetch("/api/urls");
+      // Usa window.location.origin para asegurar la URL absoluta
+      const response = await fetch(`${window.location.origin}/api/urls`);
 
-      // Verifica si la respuesta es correcta
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -35,6 +38,7 @@ export default function UrlList() {
       setIsLoading(false);
     }
   };
+
   const handleCopyUrl = (code: string) => {
     const fullUrl = `${shortenerUrl(code)}`;
     navigator.clipboard.writeText(fullUrl).then(() => {
@@ -46,6 +50,7 @@ export default function UrlList() {
       }, 3000);
     });
   };
+
   useEffect(() => {
     fetchUrls();
   }, []);
@@ -94,7 +99,7 @@ export default function UrlList() {
                 size="icon"
                 className="text-muted-foreground hover:bg-muted"
                 onClick={() => handleCopyUrl(url.shortCode)}>
-                {copied && copieUrl == url.shortCode ? (
+                {copied && copieUrl === url.shortCode ? (
                   <Check className="w-4 h-4" />
                 ) : (
                   <CopyIcon className="w-4 h-4" />
