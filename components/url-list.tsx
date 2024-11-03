@@ -17,12 +17,16 @@ export default function UrlList() {
   const [copied, setCopied] = useState<boolean>(false);
   const [copieUrl, setCopieUrl] = useState<string>("");
 
-  const shortenerUrl = (code: string) =>
-    `${process.env.NEXT_PUBLIC_BASE_URL}/${code}`;
+  // Definir directamente la base de la URL si la aplicación se ejecuta en el mismo dominio.
+  const shortenerUrl = (code: string) => `/${code}`;
 
   const fetchUrls = async () => {
     try {
+      // Uso de ruta relativa para hacer la solicitud.
       const response = await fetch("/api/urls");
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
       const data = await response.json();
       setUrls(data);
     } catch (error) {
@@ -31,7 +35,7 @@ export default function UrlList() {
   };
 
   const handleCopyUrl = (code: string) => {
-    const fullUrl = `${shortenerUrl(code)}`;
+    const fullUrl = window.location.origin + shortenerUrl(code); // Agrega el origen de la ventana.
     navigator.clipboard.writeText(fullUrl).then(() => {
       setCopied(true);
       setCopieUrl(code);
@@ -56,9 +60,9 @@ export default function UrlList() {
             className="flex items-center gap-2 justify-between bg-card rounded-md text-card-foreground border p-3">
             <Link
               href={`/${url.shortCode}`}
-              target="blank"
+              target="_blank"
               className="text-blue-500">
-              {shortenerUrl(url.shortCode)}
+              {window.location.origin + shortenerUrl(url.shortCode)}
             </Link>
 
             <div className="flex items-center">
