@@ -23,8 +23,17 @@ export default function UrlList() {
   const fetchUrls = async () => {
     setIsLoading(true);
     try {
-      // Usa window.location.origin para asegurar la URL absoluta
-      const response = await fetch(`${window.location.origin}/api/urls`);
+      // Verifica si `window` está definido antes de usarlo
+      const apiUrl =
+        (typeof window !== "undefined" ? window.location.origin : "") +
+        "/api/urls";
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
