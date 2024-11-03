@@ -19,7 +19,14 @@ export default function UrlList() {
   const fetchUrls = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("app/api/urls");
+      // Asegúrate de que la URL sea correcta
+      const response = await fetch("/api/urls");
+
+      // Verifica si la respuesta es correcta
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
       setUrls(data);
     } catch (error) {
