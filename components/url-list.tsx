@@ -16,21 +16,17 @@ export default function UrlList() {
   const [urls, setUrls] = useState<Url[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
   const [copieUrl, setCopieUrl] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const shortenerUrl = (code: string) =>
     `${process.env.NEXT_PUBLIC_BASE_URL}/${code}`;
 
   const fetchUrls = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch("/api/urls");
       const data = await response.json();
       setUrls(data);
     } catch (error) {
       console.error("Error fetching URLs", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
