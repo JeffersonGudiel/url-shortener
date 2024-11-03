@@ -19,7 +19,7 @@ export default function UrlList() {
   const fetchUrls = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("api/urls");
+      const response = await fetch("app/api/urls");
       const data = await response.json();
       setUrls(data);
     } catch (error) {
