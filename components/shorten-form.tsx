@@ -2,10 +2,9 @@
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-
 import { useState } from "react";
 
-interface ShortenFormProps { 
+interface ShortenFormProps {
   handleUrlShortened: () => void;
 }
 
@@ -15,11 +14,11 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
 
   const handlesSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/shorten", {
+      // Construye la URL absoluta con window.location.origin
+      const response = await fetch(`${window.location.origin}/api/shorten`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +27,11 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
           url,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       await response.json();
       setUrl("");
       handleUrlShortened();
