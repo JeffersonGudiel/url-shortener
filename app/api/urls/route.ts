@@ -9,7 +9,7 @@ export async function GET() {
     });
     return NextResponse.json(urls);
   } catch (error) {
-    console.error("Error fetching Urls", error);
+    console.error("Error fetching Urls", (error as any).message);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
