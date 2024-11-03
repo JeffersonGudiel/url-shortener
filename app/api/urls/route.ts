@@ -3,13 +3,25 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const urls = await prisma.url.findMany({
-      orderBy: { CreatedAt: "desc" },
-      take: 5,
-    });
+    console.log("Before database call");
+
+    // Simplifica la consulta para diagnóstico inicial
+    const urls = await prisma.url.findFirst();
+
+    console.log("After database call:", urls);
+
+    if (!urls) {
+      console.warn("No URLs found");
+    }
+
     return NextResponse.json(urls);
   } catch (error) {
-    console.error("Error fetching Urls", (error as any).message);
+    if (error instanceof Error) {
+      console.error("Error fetching URLs:", error.message, error.stack);
+    } else {
+      console.error("Error fetching URLs:", error);
+    }
+
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
