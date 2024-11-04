@@ -5,9 +5,10 @@ export async function GET() {
   try {
     console.log("Fetching URLs...");
     const urls = await prisma.url.findMany({
-      orderBy: { CreatedAt: "desc" },
+      orderBy: { id: "desc" }, // Asegúrate de que el campo se llama 'id' en tu modelo
       take: 5,
     });
+
     console.log("URLs fetched successfully:", urls);
 
     return NextResponse.json(urls, {
