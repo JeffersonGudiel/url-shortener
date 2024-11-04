@@ -17,7 +17,7 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
     setIsLoading(true);
 
     try {
-      // Construye la URL de forma segura
+      // Asegúrate de usar `window` solo en el cliente
       const apiUrl =
         typeof window !== "undefined"
           ? `${window.location.origin}/api/shorten`
@@ -28,9 +28,7 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          url,
-        }),
+        body: JSON.stringify({ url }),
       });
 
       if (!response.ok) {
