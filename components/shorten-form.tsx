@@ -17,8 +17,13 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
     setIsLoading(true);
 
     try {
-      // Construye la URL absoluta con window.location.origin
-      const response = await fetch(`${window.location.origin}/api/shorten`, {
+      // Construye la URL de forma segura
+      const apiUrl =
+        typeof window !== "undefined"
+          ? `${window.location.origin}/api/shorten`
+          : "/api/shorten";
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
