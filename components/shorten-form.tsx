@@ -12,12 +12,11 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
   const [url, setUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handlesSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Asegúrate de usar `window` solo en el cliente
       const apiUrl =
         typeof window !== "undefined"
           ? `${window.location.origin}/api/shorten`
@@ -28,7 +27,9 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({
+          url,
+        }),
       });
 
       if (!response.ok) {
@@ -46,7 +47,7 @@ export default function ShortenForm({ handleUrlShortened }: ShortenFormProps) {
   };
 
   return (
-    <form onSubmit={handlesSubmit} className="mb-4">
+    <form onSubmit={handleSubmit} className="mb-4">
       <div className="space-y-4">
         <Input
           value={url}
